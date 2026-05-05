@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Plan Fitness Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #1D9E75;
+  --green-dark: #0F6E56;
+  --green-light: #E1F5EE;
+  --green-border: #9FE1CB;
+  --amber: #F59E0B;
+  --amber-bg: #FFFBEB;
+  --red: #EF4444;
+  --red-bg: #FEF2F2;
+  --blue: #3B82F6;
+  --blue-bg: #EFF6FF;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-400: #9CA3AF;
+  --gray-600: #4B5563;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+  --white: #ffffff;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-900);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(145deg, #0F6E56 0%, #1D9E75 50%, #5DCAA5 100%);
+  padding: 48px 20px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  color: white;
+  line-height: 0.95;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.hero-sub {
+  color: rgba(255,255,255,0.8);
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 28px;
+}
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  background: rgba(255,255,255,0.12);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.2);
+  overflow: hidden;
+  max-width: 320px;
+  margin: 0 auto;
+}
+.hero-stat {
+  flex: 1;
+  padding: 14px 8px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: white;
+  line-height: 1;
+}
+.hero-stat-lbl {
+  font-size: 10px;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* ── TABS ── */
+.tab-bar {
+  display: flex;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0;
+  padding: 14px 18px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-400);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  color: var(--green-dark);
+  border-bottom-color: var(--green);
+  font-weight: 600;
+}
+
+/* ── CONTENT ── */
+.content { display: none; padding: 20px 16px 100px; max-width: 600px; margin: 0 auto; }
+.content.active { display: block; }
+
+/* ── SECTION HEADER ── */
+.section-header {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--gray-900);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+.section-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+.tag-green { background: var(--green-light); color: var(--green-dark); }
+.tag-amber { background: var(--amber-bg); color: #92400E; }
+.tag-blue { background: var(--blue-bg); color: #1E40AF; }
+.tag-red { background: var(--red-bg); color: #991B1B; }
+
+/* ── SUBTABS ── */
+.subtab-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.subtab-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--gray-200);
+  background: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-600);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.subtab-btn.active {
+  background: var(--green-light);
+  border-color: var(--green-border);
+  color: var(--green-dark);
+  font-weight: 600;
+}
+
+/* ── INFO BANNER ── */
+.banner {
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.banner-amber { background: var(--amber-bg); color: #92400E; border: 1px solid #FDE68A; }
+.banner-green { background: var(--green-light); color: var(--green-dark); border: 1px solid var(--green-border); }
+.banner-blue { background: var(--blue-bg); color: #1E40AF; border: 1px solid #BFDBFE; }
+.banner-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── EXERCISE CARD ── */
+.ex-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.ex-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 16px 12px;
+}
+.ex-num {
+  background: var(--green-light);
+  color: var(--green-dark);
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 17px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ex-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-900);
+  line-height: 1.3;
+}
+.ex-muscle {
+  font-size: 12px;
+  color: var(--green);
+  font-weight: 500;
+  margin-top: 3px;
+}
+.ex-specs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 0 16px 12px;
+}
+.spec {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.spec-green { background: var(--green-light); color: var(--green-dark); }
+.spec-gray { background: var(--gray-100); color: var(--gray-600); }
+.ex-tip {
+  margin: 0 16px 12px;
+  padding: 10px 12px;
+  background: var(--gray-50);
+  border-left: 3px solid var(--green);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 12.5px;
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+/* ── VIDEO EMBED ── */
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  background: #000;
+}
+.video-container iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+.video-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #1a1a1a;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+}
+.yt-dot { width: 8px; height: 8px; background: #FF0000; border-radius: 50%; }
+
+/* ── MEAL CARD ── */
+.meal-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.meal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.meal-time {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.meal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-top: 2px;
+}
+.meal-kcal {
+  background: var(--blue-bg);
+  color: #1E40AF;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  flex-shrink: 0;
+}
+.meal-body { padding: 14px 16px; }
+.option-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--green-dark);
+  margin: 12px 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.option-label::before {
+  content: '';
+  width: 16px; height: 2px;
+  background: var(--green);
+  border-radius: 2px;
+}
+.option-label:first-child { margin-top: 0; }
+.option-item {
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.6;
+  padding-left: 8px;
+  border-left: 2px solid var(--green-border);
+  margin-bottom: 4px;
+}
+
+/* ── MACROS CARD ── */
+.macros-card {
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  color: white;
+}
+.macros-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+.macros-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.macro-item {
+  background: rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  padding: 12px 6px;
+  text-align: center;
+}
+.macro-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  line-height: 1;
+}
+.macro-lbl {
+  font-size: 10px;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+}
+
+/* ── WEEKLY SCHEDULE ── */
+.week-card {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.week-row {
+  display: flex;
+  align-items: center;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--gray-100);
+  gap: 12px;
+}
+.week-row:last-child { border-bottom: none; }
+.week-day {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px;
+  color: var(--gray-400);
+  width: 40px;
+  flex-shrink: 0;
+}
+.week-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.week-desc { font-size: 14px; font-weight: 500; color: var(--gray-800); }
+.week-sub { font-size: 12px; color: var(--gray-400); }
+
+/* ── TIPS SECTION ── */
+.tips-card {
+  background: var(--amber-bg);
+  border: 1px solid #FDE68A;
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+.tips-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400E;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tip-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: flex-start;
+}
+.tip-item:last-child { margin-bottom: 0; }
+.tip-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.tip-text { font-size: 13.5px; color: #78350F; line-height: 1.6; }
+
+/* ── SUBSECTION ── */
+.subsection { display: none; }
+.subsection.active { display: block; }
+
+/* ── SEPARATOR ── */
+.sep {
+  height: 1px;
+  background: var(--gray-200);
+  margin: 20px 0;
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--gray-900);
+  color: var(--gray-400);
+  text-align: center;
+  padding: 24px 16px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.footer strong { color: var(--green); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Plan Personalizado</div>
+  <h1>FITNESS<br>PRO PLAN</h1>
+  <p class="hero-sub">Pérdida de grasa · Preservar músculo · Principiante</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-val">3</div>
+      <div class="hero-stat-lbl">Días/sem</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">2K</div>
+      <div class="hero-stat-lbl">Calorías</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">160g</div>
+      <div class="hero-stat-lbl">Proteína</div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('overview')">Resumen</button>
+  <button class="tab-btn" onclick="switchTab('day1')">Día 1 · Empuje</button>
+  <button class="tab-btn" onclick="switchTab('day2')">Día 2 · Jalón</button>
+  <button class="tab-btn" onclick="switchTab('day3')">Día 3 · Piernas</button>
+  <button class="tab-btn" onclick="switchTab('diet')">Alimentación</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     OVERVIEW
+═══════════════════════════════════════════════ -->
+<div class="content active" id="overview">
+
+  <div style="height:16px"></div>
+
+  <div class="section-header">
+    <div class="section-title">TU PLAN SEMANAL</div>
+    <div class="section-meta">
+      <span class="tag tag-green">Principiante</span>
+      <span class="tag tag-amber">Déficit calórico</span>
+      <span class="tag tag-blue">Sin pescado</span>
+    </div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-row">
+      <div class="week-day">LUN</div>
+      <div class="week-dot" style="background:var(--green)"></div>
+      <div>
+        <div class="week-desc">Día 1 — Empuje</div>
+        <div class="week-sub">Pecho · Hombros · Tríceps · ~45 min</div>
+      </div>
+    </div>
+    <div class="week-row">
+      <div class="week-day">MAR</div>
+      <div class="week-dot" style="background:var(--gray-200)"></div>
+      <div>
+        <div class="week-desc" style="color:var(--gray-400)">Descanso activo</div>
+        <div class="week-sub">Caminar 30 min</div>
+      </div>
+    </div>
+    <div class="week-row">
+      <div class="week-day">MIÉ</div>
+      <div class="week-dot" style="background:var(--blue)"></div>
+      <div>
+        <div class="week-desc">Día 2 — Jalón</div>
+        <div class="week-sub">Espalda · Bíceps · Core · ~45 min</div>
+      </div>
+    </div>
+    <div class="week-row">
+      <div class="week-day">JUE</div>
+      <div class="week-dot" style="background:var(--gray-200)"></div>
+      <div>
+        <div class="week-desc" style="color:var(--gray-400)">Descanso activo</div>
+        <div class="week-sub">Caminar 30 min</div>
+      </div>
+    </div>
+    <div class="week-row">
+      <div class="week-day">VIE</div>
+      <div class="week-dot" style="background:var(--amber)"></div>
+      <div>
+        <div class="week-desc">Día 3 — Piernas</div>
+        <div class="week-sub">Cuádriceps · Glúteo · Femoral · ~50 min</div>
+      </div>
+    </div>
+    <div class="week-row">
+      <div class="week-day">SÁB</div>
+      <div class="week-dot" style="background:var(--gray-200)"></div>
+      <div>
+        <div class="week-desc" style="color:var(--gray-400)">Descanso total</div>
+        <div class="week-sub">O cardio ligero opcional</div>
+      </div>
+    </div>
+    <div class="week-row">
+      <div class="week-day">DOM</div>
+      <div class="week-dot" style="background:var(--gray-200)"></div>
+      <div>
+        <div class="week-desc" style="color:var(--gray-400)">Descanso total</div>
+        <div class="week-sub">Recuperación completa</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tips-card">
+    <div class="tips-title">📋 Reglas de oro para principiante</div>
+    <div class="tip-item">
+      <div class="tip-icon">🎯</div>
+      <div class="tip-text"><strong>Técnica antes que peso.</strong> Las primeras 4 semanas aprende el movimiento. El peso viene solo después.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-icon">⬆️</div>
+      <div class="tip-text"><strong>Sube el peso</strong> cuando puedas hacer más de 12 reps con buena forma. Así progresas semana a semana.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-icon">⏱️</div>
+      <div class="tip-text"><strong>Descanso entre series:</strong> 60–90 seg en aislamiento · 2–3 min en ejercicios compuestos.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-icon">💤</div>
+      <div class="tip-text"><strong>Duerme 7–8 horas.</strong> El músculo se construye mientras duermes, no en el gym.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-icon">💧</div>
+      <div class="tip-text"><strong>2.5–3 litros de agua al día.</strong> Ayuda con saciedad en déficit calórico.</div>
+    </div>
+    <div class="tip-item">
+      <div class="tip-icon">💊</div>
+      <div class="tip-text"><strong>Suplementos opcionales:</strong> Creatina 5g/día (sin ciclar) y proteína whey si no llegas a 160g con comida.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     DÍA 1 — EMPUJE
+═══════════════════════════════════════════════ -->
+<div class="content" id="day1">
+  <div style="height:16px"></div>
+  <div class="section-header">
+    <div class="section-title">DÍA 1 — EMPUJE</div>
+    <div class="section-meta">
+      <span class="tag tag-green">Pecho</span>
+      <span class="tag tag-green">Hombros</span>
+      <span class="tag tag-green">Tríceps</span>
+      <span class="tag tag-amber">~45 min</span>
+    </div>
+  </div>
+  <div class="subtab-bar">
+    <button class="subtab-btn active" onclick="switchSub('d1gym','d1home',this)">🏢 Gimnasio</button>
+    <button class="subtab-btn" onclick="switchSub('d1home','d1gym',this)">🏠 Casa</button>
+  </div>
+
+  <!-- GYM -->
+  <div class="subsection active" id="d1gym">
+    <div class="banner banner-amber"><span class="banner-icon">⏱</span>Descanso: 2–3 min compuestos · 60–90 seg aislamiento</div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">1</div>
+        <div><div class="ex-name">Press de banca con barra</div><div class="ex-muscle">Pecho mayor · porción media</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">8–10 reps</span>
+        <span class="spec spec-gray">Compuesto principal</span>
+      </div>
+      <div class="ex-tip">Escápulas retraídas, arco lumbar neutro. Baja la barra al esternón inferior en 2 seg controlado.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/rT7DgCr-3pg" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">2</div>
+        <div><div class="ex-name">Press inclinado con mancuernas</div><div class="ex-muscle">Pecho mayor · porción superior</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">10–12 reps</span>
+        <span class="spec spec-gray">Inclinación 30–45°</span>
+      </div>
+      <div class="ex-tip">Codos a 75° del torso (no 90°). Mejor activación y menos estrés en hombros.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/8iPEnn-ltC8" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">3</div>
+        <div><div class="ex-name">Press de hombros con mancuernas</div><div class="ex-muscle">Deltoides anterior · medial</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">10–12 reps</span>
+        <span class="spec spec-gray">Espalda apoyada</span>
+      </div>
+      <div class="ex-tip">Espalda apoyada en el banco, no arquees la lumbar. Core activo durante todo el movimiento.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/HzIiNhHhhtA" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">4</div>
+        <div><div class="ex-name">Elevaciones laterales con mancuernas</div><div class="ex-muscle">Deltoides medial</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">12–15 reps</span>
+        <span class="spec spec-gray">Peso ligero · técnica</span>
+      </div>
+      <div class="ex-tip">Codo ligeramente doblado, pulgares 15° abajo. Sube hasta nivel de hombro. No osciles el torso.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/3VcKaXpzqRo" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">5</div>
+        <div><div class="ex-name">Extensión de tríceps en polea (cuerda)</div><div class="ex-muscle">Tríceps · 3 cabezas</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">12–15 reps</span>
+        <span class="spec spec-gray">Aislamiento</span>
+      </div>
+      <div class="ex-tip">Separa la cuerda al final del movimiento. Codos pegados al torso en todo momento.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/vB5OHsJ3EME" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">6</div>
+        <div><div class="ex-name">Fondos entre bancos (Bench Dips)</div><div class="ex-muscle">Tríceps · Pecho inferior</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">10–12 reps</span>
+        <span class="spec spec-gray">Pies en el suelo · principiante</span>
+      </div>
+      <div class="ex-tip">Pies apoyados en el suelo (versión principiante). Baja hasta que el codo esté a 90°. No bajes más.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/c3ZGl4pAwZ4" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASA -->
+  <div class="subsection" id="d1home">
+    <div class="banner banner-green"><span class="banner-icon">🏠</span>Solo peso corporal. Si algo es fácil: añade mochila con peso o ralentiza el movimiento.</div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">1</div>
+        <div><div class="ex-name">Flexiones con pausa (push-up)</div><div class="ex-muscle">Pecho · Tríceps · Hombro anterior</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">8–12 reps</span>
+        <span class="spec spec-gray">Pausa 2 seg abajo</span>
+      </div>
+      <div class="ex-tip">Si son fáciles: pies elevados en silla o mochila en la espalda. Forma perfecta antes que cantidad.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/IODxDxX7oi4" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">2</div>
+        <div><div class="ex-name">Flexiones con pies en silla (inclinadas)</div><div class="ex-muscle">Pecho superior · Hombro anterior</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">8–10 reps</span>
+      </div>
+      <div class="ex-tip">Cuanto más elevados los pies, más pecho superior y hombro. Core activo todo el tiempo.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/dFzUjzfih7k" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">3</div>
+        <div><div class="ex-name">Diamante push-up (manos en triángulo)</div><div class="ex-muscle">Tríceps · Pecho interior</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">8–10 reps</span>
+      </div>
+      <div class="ex-tip">Manos juntas formando triángulo debajo del pecho. Codos pegados al cuerpo al bajar.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/J0DnG1_S92I" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">4</div>
+        <div><div class="ex-name">Press de hombros sentado (botellas/mochila)</div><div class="ex-muscle">Deltoides anterior y medial</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">10–12 reps</span>
+        <span class="spec spec-gray">Improvisa el peso</span>
+      </div>
+      <div class="ex-tip">Usa botellas de agua llenas, latas o mochila. El control vale más que el peso.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/HzIiNhHhhtA" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">5</div>
+        <div><div class="ex-name">Fondos entre dos sillas</div><div class="ex-muscle">Tríceps</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">10–12 reps</span>
+      </div>
+      <div class="ex-tip">Dos sillas estables. Baja hasta 90° en el codo. Añade peso en el regazo para progresar.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/c3ZGl4pAwZ4" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header">
+        <div class="ex-num">6</div>
+        <div><div class="ex-name">Plancha con toque de hombro</div><div class="ex-muscle">Core · Estabilizadores</div></div>
+      </div>
+      <div class="ex-specs">
+        <span class="spec spec-green">3 series</span>
+        <span class="spec spec-green">10 reps por lado</span>
+      </div>
+      <div class="ex-tip">Core muy apretado, no balancees la cadera. Toca el hombro contrario lentamente.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/wqzrb67Dwf8" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     DÍA 2 — JALÓN
+═══════════════════════════════════════════════ -->
+<div class="content" id="day2">
+  <div style="height:16px"></div>
+  <div class="section-header">
+    <div class="section-title">DÍA 2 — JALÓN</div>
+    <div class="section-meta">
+      <span class="tag tag-blue">Espalda</span>
+      <span class="tag tag-blue">Bíceps</span>
+      <span class="tag tag-blue">Core</span>
+      <span class="tag tag-amber">~45 min</span>
+    </div>
+  </div>
+  <div class="subtab-bar">
+    <button class="subtab-btn active" onclick="switchSub('d2gym','d2home',this)">🏢 Gimnasio</button>
+    <button class="subtab-btn" onclick="switchSub('d2home','d2gym',this)">🏠 Casa</button>
+  </div>
+
+  <div class="subsection active" id="d2gym">
+    <div class="banner banner-amber"><span class="banner-icon">⏱</span>Descanso: 2–3 min compuestos · 60–90 seg aislamiento y core</div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">1</div><div><div class="ex-name">Jalón al pecho en polea (agarre ancho)</div><div class="ex-muscle">Dorsal ancho · Redondo mayor</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">10–12 reps</span><span class="spec spec-gray">Compuesto principal</span></div>
+      <div class="ex-tip">Inclínate 15° atrás, lleva la barra al esternón. No uses impulso del torso.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/CAwf7n6Luuc" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">2</div><div><div class="ex-name">Remo en polea baja (agarre neutro)</div><div class="ex-muscle">Dorsal · Bíceps · Trapecio</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">10–12 reps</span></div>
+      <div class="ex-tip">Siéntate erguido. Lleva los codos detrás del torso. No dejes caer hombros al frente.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/GZbfZ033f74" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">3</div><div><div class="ex-name">Remo con mancuerna (un brazo)</div><div class="ex-muscle">Dorsal unilateral · Control</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">10–12 reps/lado</span></div>
+      <div class="ex-tip">Rodilla y mano contraria en banco. Tira hacia la cadera, no al hombro. Rango completo.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/pYcpY20QaE8" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">4</div><div><div class="ex-name">Curl de bíceps con mancuernas</div><div class="ex-muscle">Bíceps · Braquial</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">10–12 reps</span><span class="spec spec-gray">Excéntrico lento</span></div>
+      <div class="ex-tip">Codos fijos a los costados. Baja en 3 seg (excéntrico lento). No osciles el torso.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/ykJmrZ5v0Oo" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">5</div><div><div class="ex-name">Curl martillo con mancuernas</div><div class="ex-muscle">Braquioradial · Bíceps · Antebrazo</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">12 reps</span></div>
+      <div class="ex-tip">Agarre neutro (pulgares arriba). Alterna brazos. Excelente para grosor del brazo.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/zC3nLlEvin4" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">6</div><div><div class="ex-name">Plancha frontal</div><div class="ex-muscle">Core · Estabilizadores</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">30–40 seg</span></div>
+      <div class="ex-tip">Cuerpo recto, no subas el trasero ni dejes caer las caderas. Core permanentemente activo.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/pSHjTRCQxIw" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+  </div>
+
+  <div class="subsection" id="d2home">
+    <div class="banner banner-green"><span class="banner-icon">🏠</span>Una barra de dominadas barata transforma este día. Si no tienes, usa la mesa.</div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">1</div><div><div class="ex-name">Remo invertido bajo mesa (inverted row)</div><div class="ex-muscle">Dorsal · Romboides · Bíceps</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">8–12 reps</span></div>
+      <div class="ex-tip">Acuéstate bajo mesa resistente. Agarra el borde y tira el pecho hacia arriba. Cuerpo rígido como tabla.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/B6N9KoLMhY4" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">2</div><div><div class="ex-name">Dominadas (Pull-ups)</div><div class="ex-muscle">Dorsal ancho · Bíceps</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">Máx reps buena forma</span></div>
+      <div class="ex-tip">Si no puedes: dominadas negativas — sube con silla, baja lento en 5 seg. 4 negativas = 1 serie efectiva.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/eGo4IYlbE5g" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">3</div><div><div class="ex-name">Remo con mochila/botella (un brazo)</div><div class="ex-muscle">Dorsal unilateral</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">12 reps/lado</span></div>
+      <div class="ex-tip">Rodilla y mano contraria en silla. Tira el peso hacia la cadera, no al hombro. Improvisa el peso.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/pYcpY20QaE8" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">4</div><div><div class="ex-name">Superman hold</div><div class="ex-muscle">Erector espinal · Glúteo</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">12–15 reps</span><span class="spec spec-gray">2 seg arriba</span></div>
+      <div class="ex-tip">Boca abajo. Levanta brazos y piernas simultáneamente. Aprieta glúteos en la cima.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/z6PJMT2y8GQ" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">5</div><div><div class="ex-name">Curl de bíceps con botellas/mochila</div><div class="ex-muscle">Bíceps · Braquial</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">12–15 reps</span><span class="spec spec-gray">Tempo 2-0-3</span></div>
+      <div class="ex-tip">Excéntrico lento 3 seg bajando. La fase negativa construye músculo igual o más que la positiva.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/ykJmrZ5v0Oo" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">6</div><div><div class="ex-name">Plancha lateral (cada lado)</div><div class="ex-muscle">Core lateral · Oblicuos</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">25–35 seg/lado</span></div>
+      <div class="ex-tip">Cadera arriba, cuerpo en línea recta. Progresión: eleva la pierna de arriba mientras aguantas.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/K2eVMIl4ze0" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     DÍA 3 — PIERNAS
+═══════════════════════════════════════════════ -->
+<div class="content" id="day3">
+  <div style="height:16px"></div>
+  <div class="section-header">
+    <div class="section-title">DÍA 3 — PIERNAS</div>
+    <div class="section-meta">
+      <span class="tag tag-amber">Cuádriceps</span>
+      <span class="tag tag-amber">Glúteo</span>
+      <span class="tag tag-amber">Femoral</span>
+      <span class="tag tag-amber">~50 min</span>
+    </div>
+  </div>
+  <div class="subtab-bar">
+    <button class="subtab-btn active" onclick="switchSub('d3gym','d3home',this)">🏢 Gimnasio</button>
+    <button class="subtab-btn" onclick="switchSub('d3home','d3gym',this)">🏠 Casa</button>
+  </div>
+
+  <div class="subsection active" id="d3gym">
+    <div class="banner banner-amber"><span class="banner-icon">⏱</span>Descanso: 2–3 min en sentadilla y peso muerto · 60–90 seg aislamiento</div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">1</div><div><div class="ex-name">Sentadilla con barra (back squat)</div><div class="ex-muscle">Cuádriceps · Glúteo · Femoral</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">8–10 reps</span><span class="spec spec-gray">El rey de los ejercicios</span></div>
+      <div class="ex-tip">Pies a anchura de hombros, puntas 15–30° afuera. Baja hasta muslos paralelos al suelo. Rodillas siguen punteras.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/ultWZbUMPL8" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">2</div><div><div class="ex-name">Prensa de piernas</div><div class="ex-muscle">Cuádriceps · Glúteo</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">12 reps</span></div>
+      <div class="ex-tip">Pies al centro de la plataforma. No bloquees las rodillas al extender. Rodillas siguen las punteras.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/IZxyjW7MPJQ" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">3</div><div><div class="ex-name">Peso muerto rumano (RDL)</div><div class="ex-muscle">Femoral · Glúteo · Erector espinal</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">10–12 reps</span></div>
+      <div class="ex-tip">Rodillas ligeramente dobladas, espalda SIEMPRE plana. Baja hasta sentir el estiramiento del femoral.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/hCDzSR6bW10" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">4</div><div><div class="ex-name">Zancadas caminando con mancuernas</div><div class="ex-muscle">Cuádriceps · Glúteo unilateral</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">10 reps/pierna</span></div>
+      <div class="ex-tip">Rodilla trasera casi toca el suelo. Rodilla delantera no pase la punta del pie. Torso erguido.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/D7KaRcUTQeE" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">5</div><div><div class="ex-name">Hip thrust en banco</div><div class="ex-muscle">Glúteo mayor · máxima activación</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">12–15 reps</span><span class="spec spec-gray">Pausa 1 seg arriba</span></div>
+      <div class="ex-tip">Hombros en el borde del banco, barbilla al pecho. Aprieta el glúteo al máximo en la cima. No arquees la lumbar.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/SEdqd1n0cvg" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">6</div><div><div class="ex-name">Calf raise de pie (escalón si hay)</div><div class="ex-muscle">Gastrocnemio · Sóleo</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">20 reps</span><span class="spec spec-gray">Rango completo</span></div>
+      <div class="ex-tip">Baja lento hasta el estiramiento completo del talón. Sube de puntillas lo más alto posible.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/-M4-G8p1fCI" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+  </div>
+
+  <div class="subsection" id="d3home">
+    <div class="banner banner-green"><span class="banner-icon">🏠</span>Sin equipo o con mochila con peso. Igual de efectivo con buena progresión.</div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">1</div><div><div class="ex-name">Sentadilla búlgara (pie en silla)</div><div class="ex-muscle">Cuádriceps · Glúteo unilateral</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">10 reps/pierna</span></div>
+      <div class="ex-tip">Pie trasero en silla o cama. Desciende lento. Añade mochila con peso para progresar. Es brutal y efectiva.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/2C-uNgKwPLE" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">2</div><div><div class="ex-name">Sentadilla sumo con peso improvisado</div><div class="ex-muscle">Cuádriceps · Aductores · Glúteo</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">15 reps</span></div>
+      <div class="ex-tip">Pies más anchos que hombros, puntas 45°. Sostén mochila, garrafón o cualquier objeto pesado al centro.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/qJwx0dJCfEk" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">3</div><div><div class="ex-name">Good morning (sin peso o mochila)</div><div class="ex-muscle">Femoral · Glúteo · Erector espinal</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">12–15 reps</span></div>
+      <div class="ex-tip">Rodillas semi-dobladas, inclínate hacia adelante controlando el femoral. Espalda plana siempre.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/YA-h3n9L4YU" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">4</div><div><div class="ex-name">Zancadas alternas en el lugar</div><div class="ex-muscle">Cuádriceps · Glúteo</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">10 reps/pierna</span></div>
+      <div class="ex-tip">Alterna piernas. Con mochila o botellas en cada mano para aumentar la intensidad gradualmente.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/wrwwXE_x-pQ" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">5</div><div><div class="ex-name">Hip thrust con hombros en el sofá</div><div class="ex-muscle">Glúteo mayor</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">15 reps</span><span class="spec spec-gray">Pausa 1 seg arriba</span></div>
+      <div class="ex-tip">Hombros en sofá o silla. Coloca mochila o garrafón en el regazo como peso. Idéntico al del gym.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/xDmFkJxPzeM" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+
+    <div class="ex-card">
+      <div class="ex-header"><div class="ex-num">6</div><div><div class="ex-name">Calf raise en escalón (una pierna)</div><div class="ex-muscle">Gastrocnemio · Sóleo</div></div></div>
+      <div class="ex-specs"><span class="spec spec-green">3 series</span><span class="spec spec-green">15–20 reps/pierna</span></div>
+      <div class="ex-tip">Un pie en el escalón o borde de una plataforma. Una sola pierna duplica la intensidad. Rango completo.</div>
+      <div class="video-label"><div class="yt-dot"></div>Tutorial en video</div>
+      <div class="video-container"><iframe src="https://www.youtube.com/embed/gwLzBJYoWlI" allowfullscreen loading="lazy"></iframe></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     ALIMENTACIÓN
+═══════════════════════════════════════════════ -->
+<div class="content" id="diet">
+  <div style="height:16px"></div>
+
+  <div class="macros-card">
+    <div class="macros-title">MACROS DIARIOS OBJETIVO</div>
+    <div class="macros-grid">
+      <div class="macro-item"><div class="macro-val">2,000</div><div class="macro-lbl">Calorías</div></div>
+      <div class="macro-item"><div class="macro-val">160g</div><div class="macro-lbl">Proteína</div></div>
+      <div class="macro-item"><div class="macro-val">~180g</div><div class="macro-lbl">Carbos</div></div>
+      <div class="macro-item"><div class="macro-val">~60g</div><div class="macro-lbl">Grasas</div></div>
+    </div>
+  </div>
+
+  <div class="banner banner-green"><span class="banner-icon">💡</span>Proteína alta en 5 comidas mantiene la síntesis muscular activa. Carbohidratos concentrados cerca del entrenamiento. Grasas en comidas alejadas del gym.</div>
+
+  <div class="meal-card">
+    <div class="meal-header">
+      <div><div class="meal-time">7–8 am</div><div class="meal-title">Desayuno</div></div>
+      <div class="meal-kcal">~500 kcal<br><strong>40g prot</strong></div>
+    </div>
+    <div class="meal-body">
+      <div class="option-label">Opción A</div>
+      <div class="option-item">4 huevos enteros + 200g claras revueltas + 2 rebanadas pan integral + café negro</div>
+      <div class="option-label">Opción B</div>
+      <div class="option-item">250g yogur griego 0% + 30g avena + 1 scoop proteína whey + 1 fruta pequeña</div>
+      <div class="option-label">Opción C</div>
+      <div class="option-item">Omelette de 3 huevos + pechuga de pavo en tiras + espinacas salteadas + 1 tostada integral</div>
+    </div>
+  </div>
+
+  <div class="meal-card">
+    <div class="meal-header">
+      <div><div class="meal-time">10–11 am</div><div class="meal-title">Colación mañana</div></div>
+      <div class="meal-kcal">~250 kcal<br><strong>30g prot</strong></div>
+    </div>
+    <div class="meal-body">
+      <div class="option-label">Opción A</div>
+      <div class="option-item">200g requesón o cottage cheese + pepino + sal y limón</div>
+      <div class="option-label">Opción B</div>
+      <div class="option-item">1 scoop proteína whey en agua + 1 manzana o naranja</div>
+      <div class="option-label">Opción C</div>
+      <div class="option-item">100g pechuga de pollo fría + jícama en bastones + limón y chile</div>
+    </div>
+  </div>
+
+  <div class="meal-card">
+    <div class="meal-header">
+      <div><div class="meal-time">1–2 pm</div><div class="meal-title">Comida principal</div></div>
+      <div class="meal-kcal">~550 kcal<br><strong>45g prot</strong></div>
+    </div>
+    <div class="meal-body">
+      <div class="option-label">Opción A — Pollo</div>
+      <div class="option-item">180g pechuga a la plancha + 150g arroz integral + ensalada grande con 1 cdita aceite de oliva</div>
+      <div class="option-label">Opción B — Res</div>
+      <div class="option-item">150g carne molida 90/10 + 120g frijoles negros + 2 tortillas de maíz + 30g guacamole + salsa verde</div>
+      <div class="option-label">Opción C — Pavo</div>
+      <div class="option-item">180g milanesa de pavo horneada + 150g camote + brócoli al vapor + limón</div>
+      <div class="option-label">Opción D — Vegetariana</div>
+      <div class="option-item">200g tofu firme salteado + 100g lentejas + 120g arroz blanco cocido + verduras mixtas</div>
+    </div>
+  </div>
+
+  <div class="meal-card">
+    <div class="meal-header">
+      <div><div class="meal-time">4–6 pm</div><div class="meal-title">Pre / Post entrenamiento</div></div>
+      <div class="meal-kcal">~350 kcal<br><strong>30g prot</strong></div>
+    </div>
+    <div class="meal-body">
+      <div class="option-label">Opción A — Post-entreno</div>
+      <div class="option-item">1 scoop proteína whey + 1 plátano + 1 tortilla con 80g pechuga de pollo</div>
+      <div class="option-label">Opción B — Pre-entreno (1h antes)</div>
+      <div class="option-item">2 rebanadas pan integral + 2 huevos cocidos + café negro sin azúcar</div>
+      <div class="option-label">Opción C — Sin suplementos</div>
+      <div class="option-item">200g yogur griego + 150g fresas o berries + 20g nueces o almendras</div>
+    </div>
+  </div>
+
+  <div class="meal-card">
+    <div class="meal-header">
+      <div><div class="meal-time">8–9 pm</div><div class="meal-title">Cena</div></div>
+      <div class="meal-kcal">~350 kcal<br><strong>35g prot</strong></div>
+    </div>
+    <div class="meal-body">
+      <div class="option-label">Opción A — Ligera</div>
+      <div class="option-item">150g pechuga al horno con especias + ensalada grande (lechuga, pepino, tomate, zanahoria) + 1 cdita aceite de oliva</div>
+      <div class="option-label">Opción B — Saciante</div>
+      <div class="option-item">6 claras en omelette + espinacas + 30g queso Oaxaca + calabacitas salteadas</div>
+      <div class="option-label">Opción C — Proteína y grasa sana</div>
+      <div class="option-item">130g bistec de res magro + ensalada con ¼ aguacate + brócoli + limón y sal</div>
+      <div class="option-label">Opción D — Rápida</div>
+      <div class="option-item">200g requesón + tomate cherry + zanahoria cruda + 2 claras de huevo cocidas</div>
+    </div>
+  </div>
+
+  <div class="tips-card">
+    <div class="tips-title">💊 Suplementos y tips finales</div>
+    <div class="tip-item"><div class="tip-icon">💧</div><div class="tip-text"><strong>Hidratación:</strong> 2.5–3 litros de agua al día. Ayuda con saciedad en déficit.</div></div>
+    <div class="tip-item"><div class="tip-icon">🔬</div><div class="tip-text"><strong>Creatina monohidratada:</strong> 5g al día, sin ciclar. El suplemento más estudiado y seguro que existe.</div></div>
+    <div class="tip-item"><div class="tip-icon">🥛</div><div class="tip-text"><strong>Proteína whey:</strong> Solo si no llegas a 160g con comida real. No es obligatoria.</div></div>
+    <div class="tip-item"><div class="tip-icon">🍕</div><div class="tip-text"><strong>Día libre semanal:</strong> Una vez a la semana añade 300–400 kcal extra de comida real. No rompe el déficit semanal.</div></div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>Plan Fitness Pro</strong> · Diseñado para déficit calórico con preservación muscular<br>
+  Principiante · Sin pescado · 3 días/semana · 2,000 kcal · 160g proteína<br>
+  <br>
+  Los videos se reproducen directamente en esta página 🎬
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function switchSub(showId, hideId, btn) {
+  document.getElementById(showId).classList.add('active');
+  document.getElementById(hideId).classList.remove('active');
+  btn.closest('.subtab-bar').querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
