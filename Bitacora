@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Bitácora de Entrenamiento</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g: #1D9E75;
+  --gd: #0F6E56;
+  --gl: #E1F5EE;
+  --gb: #9FE1CB;
+  --amber: #F59E0B;
+  --amber-bg: #FFFBEB;
+  --red: #EF4444;
+  --red-bg: #FEF2F2;
+  --blue: #3B82F6;
+  --blue-bg: #EFF6FF;
+  --g50: #F9FAFB;
+  --g100: #F3F4F6;
+  --g200: #E5E7EB;
+  --g300: #D1D5DB;
+  --g400: #9CA3AF;
+  --g600: #4B5563;
+  --g700: #374151;
+  --g800: #1F2937;
+  --g900: #111827;
+  --white: #ffffff;
+  --r: 10px;
+  --rl: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'DM Sans', sans-serif; background: #F0F2F0; color: var(--g900); min-height: 100vh; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(160deg, #0a4a38 0%, #0F6E56 40%, #1D9E75 80%, #5DCAA5 100%);
+  padding: 40px 20px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -60px;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -50px; left: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.hero-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+  text-transform: uppercase; color: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
+}
+.hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px; color: white; line-height: 0.9;
+  letter-spacing: 1px; margin-bottom: 6px;
+}
+.hero-sub { font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 24px; }
+.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.9);
+  font-size: 11px; font-weight: 500;
+  padding: 5px 12px; border-radius: 20px;
+}
+
+/* TABS */
+.tab-bar {
+  display: flex; background: var(--white);
+  border-bottom: 1px solid var(--g200);
+  overflow-x: auto; scrollbar-width: none;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0; padding: 13px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 500;
+  color: var(--g400); background: none;
+  border: none; border-bottom: 3px solid transparent;
+  cursor: pointer; white-space: nowrap; transition: all 0.2s;
+}
+.tab-btn.active { color: var(--gd); border-bottom-color: var(--g); font-weight: 600; }
+
+/* CONTENT */
+.content { display: none; padding: 16px 16px 100px; max-width: 560px; margin: 0 auto; }
+.content.active { display: block; }
+
+/* WEEK SELECTOR */
+.week-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--white); border-radius: var(--r);
+  border: 1px solid var(--g200); padding: 12px 16px;
+  margin-bottom: 14px;
+}
+.week-nav {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--g50); border: 1px solid var(--g200);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; cursor: pointer; color: var(--g600);
+  transition: all 0.15s;
+}
+.week-nav:hover { background: var(--gl); border-color: var(--gb); color: var(--gd); }
+.week-label { text-align: center; }
+.week-num { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--g900); line-height: 1; }
+.week-dates { font-size: 11px; color: var(--g400); margin-top: 2px; }
+
+/* SESSION CARD */
+.session-card {
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-radius: var(--rl);
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.session-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--g100);
+  cursor: pointer;
+}
+.session-left { display: flex; align-items: center; gap: 12px; }
+.session-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.session-day { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--g400); }
+.session-name { font-size: 15px; font-weight: 600; color: var(--g900); margin-top: 1px; }
+.session-toggle {
+  font-size: 18px; color: var(--g400); transition: transform 0.2s;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.session-toggle.open { transform: rotate(180deg); }
+
+.session-body { display: none; padding: 14px 16px; }
+.session-body.open { display: block; }
+
+/* DATE + MODO */
+.session-meta {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 14px;
+}
+.field-group { display: flex; flex-direction: column; gap: 4px; }
+.field-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--g400); text-transform: uppercase; letter-spacing: 0.8px;
+}
+.field-input {
+  background: var(--g50); border: 1px solid var(--g200);
+  border-radius: 8px; padding: 8px 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--g900);
+  width: 100%; outline: none;
+  transition: border-color 0.15s;
+}
+.field-input:focus { border-color: var(--g); background: var(--gl); }
+select.field-input { cursor: pointer; }
+
+/* EXERCISE LOG */
+.ex-log { margin-bottom: 10px; }
+.ex-log-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.ex-num-badge {
+  background: var(--gl); color: var(--gd);
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue'; font-size: 14px; flex-shrink: 0;
+}
+.ex-log-name { font-size: 13px; font-weight: 600; color: var(--g800); }
+.ex-log-target { font-size: 11px; color: var(--g400); margin-top: 1px; }
+
+.series-grid {
+  display: grid;
+  grid-template-columns: 28px 1fr 1fr 1fr 32px;
+  gap: 4px; align-items: center;
+  margin-bottom: 4px;
+}
+.series-head {
+  font-size: 10px; font-weight: 600;
+  color: var(--g400); text-transform: uppercase;
+  letter-spacing: 0.5px; text-align: center;
+  padding: 4px 0;
+}
+.series-num {
+  font-family: 'DM Mono'; font-size: 12px;
+  color: var(--g400); text-align: center;
+}
+.series-input {
+  background: var(--g50); border: 1px solid var(--g200);
+  border-radius: 6px; padding: 7px 6px;
+  font-family: 'DM Mono'; font-size: 13px;
+  color: var(--g900); text-align: center;
+  width: 100%; outline: none;
+  transition: all 0.15s;
+}
+.series-input:focus { border-color: var(--g); background: var(--gl); }
+.series-input::placeholder { color: var(--g300); font-size: 11px; }
+.check-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid var(--g200);
+  background: var(--white); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; transition: all 0.15s;
+  color: transparent;
+}
+.check-btn.done {
+  background: var(--g); border-color: var(--g);
+  color: white;
+}
+
+.ex-notes {
+  margin-top: 6px;
+}
+.ex-notes textarea {
+  width: 100%; background: var(--g50);
+  border: 1px solid var(--g200); border-radius: 8px;
+  padding: 8px 10px; font-family: 'DM Sans';
+  font-size: 12px; color: var(--g800);
+  resize: none; outline: none;
+  transition: border-color 0.15s; min-height: 44px;
+}
+.ex-notes textarea:focus { border-color: var(--g); background: var(--gl); }
+
+.ex-divider { height: 1px; background: var(--g100); margin: 12px 0; }
+
+/* GENERAL NOTES */
+.general-notes {
+  background: var(--amber-bg);
+  border: 1px solid #FDE68A;
+  border-radius: var(--r); padding: 12px 14px;
+  margin-top: 14px;
+}
+.general-notes-label {
+  font-size: 11px; font-weight: 600;
+  color: #92400E; text-transform: uppercase;
+  letter-spacing: 0.8px; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.general-notes textarea {
+  width: 100%; background: rgba(255,255,255,0.6);
+  border: 1px solid #FDE68A; border-radius: 8px;
+  padding: 8px 10px; font-family: 'DM Sans';
+  font-size: 13px; color: #78350F;
+  resize: none; outline: none;
+  transition: border-color 0.15s; min-height: 60px;
+}
+.general-notes textarea:focus { border-color: #F59E0B; }
+
+/* FEELING */
+.feeling-row {
+  display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.feeling-btn {
+  flex: 1; min-width: 60px;
+  padding: 8px 4px; border-radius: 8px;
+  border: 1.5px solid var(--g200);
+  background: var(--white); cursor: pointer;
+  text-align: center; font-size: 18px;
+  transition: all 0.15s;
+}
+.feeling-btn.selected { border-color: var(--g); background: var(--gl); transform: scale(1.08); }
+.feeling-lbl { font-size: 10px; color: var(--g400); display: block; margin-top: 3px; }
+
+/* SAVE BTN */
+.save-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--gd), var(--g));
+  color: white; border: none;
+  border-radius: var(--r); cursor: pointer;
+  font-family: 'Bebas Neue'; font-size: 20px;
+  letter-spacing: 1px; margin-top: 14px;
+  transition: opacity 0.15s;
+}
+.save-btn:active { opacity: 0.85; }
+
+/* HISTORIAL */
+.hist-card {
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-radius: var(--rl);
+  margin-bottom: 12px; overflow: hidden;
+}
+.hist-header {
+  display: flex; justify-content: space-between;
+  align-items: center; padding: 14px 16px;
+  border-bottom: 1px solid var(--g100);
+}
+.hist-title { font-size: 14px; font-weight: 600; color: var(--g900); }
+.hist-date { font-size: 12px; color: var(--g400); }
+.hist-body { padding: 12px 16px; }
+.hist-ex { margin-bottom: 10px; }
+.hist-ex-name { font-size: 13px; font-weight: 600; color: var(--g700); margin-bottom: 4px; }
+.hist-series-row {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+.hist-pill {
+  background: var(--gl); color: var(--gd);
+  font-family: 'DM Mono'; font-size: 11px; font-weight: 500;
+  padding: 3px 9px; border-radius: 20px;
+}
+.hist-feel { margin-top: 8px; font-size: 13px; color: var(--g600); }
+.hist-note { margin-top: 6px; font-size: 12px; color: var(--g500); font-style: italic; }
+.empty-hist {
+  text-align: center; padding: 40px 20px;
+  color: var(--g400); font-size: 14px;
+}
+.empty-hist .empty-icon { font-size: 40px; margin-bottom: 12px; display: block; }
+
+/* STATS */
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 14px;
+}
+.stat-card {
+  background: var(--white); border: 1px solid var(--g200);
+  border-radius: var(--r); padding: 14px;
+  text-align: center;
+}
+.stat-val {
+  font-family: 'Bebas Neue'; font-size: 32px;
+  color: var(--g); line-height: 1;
+}
+.stat-lbl { font-size: 11px; color: var(--g400); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px; }
+
+.streak-card {
+  background: linear-gradient(135deg, var(--gd), var(--g));
+  border-radius: var(--rl); padding: 20px;
+  margin-bottom: 14px; color: white; text-align: center;
+}
+.streak-num {
+  font-family: 'Bebas Neue'; font-size: 64px;
+  line-height: 1; color: white;
+}
+.streak-lbl { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+
+.progress-section { margin-bottom: 14px; }
+.progress-title { font-size: 13px; font-weight: 600; color: var(--g700); margin-bottom: 10px; }
+.progress-row { margin-bottom: 10px; }
+.progress-label-row {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--g600); margin-bottom: 5px;
+}
+.progress-bar {
+  height: 8px; background: var(--g100);
+  border-radius: 4px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--gd), var(--g));
+  border-radius: 4px; transition: width 0.6s ease;
+}
+
+/* FOOTER */
+.footer {
+  background: var(--g900); color: var(--g400);
+  text-align: center; padding: 20px;
+  font-size: 12px; line-height: 1.8;
+}
+.footer strong { color: var(--g); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">Plan Fitness Pro</div>
+  <h1>BITÁCORA<br>DE ENTRENO</h1>
+  <p class="hero-sub">Registra cada sesión · Monitorea tu progreso</p>
+  <div class="hero-chips">
+    <span class="chip">3 días / semana</span>
+    <span class="chip">Principiante</span>
+    <span class="chip">Déficit calórico</span>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('registro')">📝 Registrar</button>
+  <button class="tab-btn" onclick="switchTab('historial')">📋 Historial</button>
+  <button class="tab-btn" onclick="switchTab('estadisticas')">📊 Estadísticas</button>
+</div>
+
+<!-- ═══ REGISTRO ═══ -->
+<div class="content active" id="registro">
+  <div style="height:4px"></div>
+
+  <!-- WEEK SELECTOR -->
+  <div class="week-bar">
+    <button class="week-nav" onclick="changeWeek(-1)">‹</button>
+    <div class="week-label">
+      <div class="week-num" id="weekLabel">SEMANA 1</div>
+      <div class="week-dates" id="weekDates">Cargando...</div>
+    </div>
+    <button class="week-nav" onclick="changeWeek(1)">›</button>
+  </div>
+
+  <!-- DÍA 1 -->
+  <div class="session-card">
+    <div class="session-header" onclick="toggleSession('s1')">
+      <div class="session-left">
+        <div class="session-dot" style="background:#1D9E75"></div>
+        <div>
+          <div class="session-day">Lunes</div>
+          <div class="session-name">Día 1 — Empuje</div>
+        </div>
+      </div>
+      <button class="session-toggle" id="toggle-s1">▾</button>
+    </div>
+    <div class="session-body" id="body-s1">
+      <div class="session-meta">
+        <div class="field-group">
+          <div class="field-label">Fecha</div>
+          <input type="date" class="field-input" id="d1-date">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Modo</div>
+          <select class="field-input" id="d1-modo">
+            <option value="gym">🏢 Gimnasio</option>
+            <option value="home">🏠 Casa</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-label" style="margin-bottom:8px;">¿Cómo te sentiste?</div>
+      <div class="feeling-row" id="d1-feeling">
+        <button class="feeling-btn" onclick="setFeeling('d1',1)">😫<span class="feeling-lbl">Pesado</span></button>
+        <button class="feeling-btn" onclick="setFeeling('d1',2)">😐<span class="feeling-lbl">Regular</span></button>
+        <button class="feeling-btn" onclick="setFeeling('d1',3)">💪<span class="feeling-lbl">Bien</span></button>
+        <button class="feeling-btn" onclick="setFeeling('d1',4)">🔥<span class="feeling-lbl">Brutal</span></button>
+      </div>
+
+      <!-- Ejercicios Día 1 -->
+      <div id="d1-exercises">
+        <!-- GYM -->
+        <div class="d1-gym-ex">
+          <div class="ex-log" id="d1-ex1">
+            <div class="ex-log-header">
+              <div class="ex-num-badge">1</div>
+              <div><div class="ex-log-name">Press de banca con barra</div><div class="ex-log-target">3 × 8–10 reps</div></div>
+            </div>
+            <div class="series-grid">
+              <div class="series-head">S</div>
+              <div class="series-head">Kg</div>
+              <div class="series-head">Reps</div>
+              <div class="series-head">RPE</div>
+              <div></div>
+            </div>
+            <div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="ex-notes"><textarea placeholder="Notas (ej: aumentar peso la próxima)..."></textarea></div>
+          </div>
+          <div class="ex-divider"></div>
+          <div class="ex-log">
+            <div class="ex-log-header"><div class="ex-num-badge">2</div><div><div class="ex-log-name">Press inclinado con mancuernas</div><div class="ex-log-target">3 × 10–12 reps</div></div></div>
+            <div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div>
+            <div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="ex-notes"><textarea placeholder="Notas..."></textarea></div>
+          </div>
+          <div class="ex-divider"></div>
+          <div class="ex-log">
+            <div class="ex-log-header"><div class="ex-num-badge">3</div><div><div class="ex-log-name">Press de hombros con mancuernas</div><div class="ex-log-target">3 × 10–12 reps</div></div></div>
+            <div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div>
+            <div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="ex-notes"><textarea placeholder="Notas..."></textarea></div>
+          </div>
+          <div class="ex-divider"></div>
+          <div class="ex-log">
+            <div class="ex-log-header"><div class="ex-num-badge">4</div><div><div class="ex-log-name">Elevaciones laterales</div><div class="ex-log-target">3 × 12–15 reps</div></div></div>
+            <div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div>
+            <div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="ex-notes"><textarea placeholder="Notas..."></textarea></div>
+          </div>
+          <div class="ex-divider"></div>
+          <div class="ex-log">
+            <div class="ex-log-header"><div class="ex-num-badge">5</div><div><div class="ex-log-name">Extensión tríceps en polea</div><div class="ex-log-target">3 × 12–15 reps</div></div></div>
+            <div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div>
+            <div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="ex-notes"><textarea placeholder="Notas..."></textarea></div>
+          </div>
+          <div class="ex-divider"></div>
+          <div class="ex-log">
+            <div class="ex-log-header"><div class="ex-num-badge">6</div><div><div class="ex-log-name">Fondos entre bancos</div><div class="ex-log-target">3 × 10–12 reps</div></div></div>
+            <div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div>
+            <div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div>
+            <div class="ex-notes"><textarea placeholder="Notas..."></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="general-notes">
+        <div class="general-notes-label">📝 Notas generales de la sesión</div>
+        <textarea id="d1-notes" placeholder="¿Cómo fue el entrenamiento? ¿Algo que ajustar? ¿Dolor o molestia?..."></textarea>
+      </div>
+      <button class="save-btn" onclick="saveSession('d1','Día 1 — Empuje')">GUARDAR SESIÓN</button>
+    </div>
+  </div>
+
+  <!-- DÍA 2 -->
+  <div class="session-card">
+    <div class="session-header" onclick="toggleSession('s2')">
+      <div class="session-left">
+        <div class="session-dot" style="background:#3B82F6"></div>
+        <div>
+          <div class="session-day">Miércoles</div>
+          <div class="session-name">Día 2 — Jalón</div>
+        </div>
+      </div>
+      <button class="session-toggle" id="toggle-s2">▾</button>
+    </div>
+    <div class="session-body" id="body-s2">
+      <div class="session-meta">
+        <div class="field-group"><div class="field-label">Fecha</div><input type="date" class="field-input" id="d2-date"></div>
+        <div class="field-group"><div class="field-label">Modo</div><select class="field-input" id="d2-modo"><option value="gym">🏢 Gimnasio</option><option value="home">🏠 Casa</option></select></div>
+      </div>
+      <div class="field-label" style="margin-bottom:8px;">¿Cómo te sentiste?</div>
+      <div class="feeling-row" id="d2-feeling">
+        <button class="feeling-btn" onclick="setFeeling('d2',1)">😫<span class="feeling-lbl">Pesado</span></button>
+        <button class="feeling-btn" onclick="setFeeling('d2',2)">😐<span class="feeling-lbl">Regular</span></button>
+        <button class="feeling-btn" onclick="setFeeling('d2',3)">💪<span class="feeling-lbl">Bien</span></button>
+        <button class="feeling-btn" onclick="setFeeling('d2',4)">🔥<span class="feeling-lbl">Brutal</span></button>
+      </div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">1</div><div><div class="ex-log-name">Jalón al pecho en polea</div><div class="ex-log-target">3 × 10–12 reps</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">2</div><div><div class="ex-log-name">Remo en polea baja</div><div class="ex-log-target">3 × 10–12 reps</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">3</div><div><div class="ex-log-name">Remo con mancuerna (un brazo)</div><div class="ex-log-target">3 × 10–12 reps/lado</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">4</div><div><div class="ex-log-name">Curl de bíceps con mancuernas</div><div class="ex-log-target">3 × 10–12 reps</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">5</div><div><div class="ex-log-name">Curl martillo con mancuernas</div><div class="ex-log-target">3 × 12 reps</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">6</div><div><div class="ex-log-name">Plancha frontal</div><div class="ex-log-target">3 × 30–40 seg</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Seg</div><div class="series-head">—</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="—" type="text" disabled style="opacity:0.3"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="—" type="text" disabled style="opacity:0.3"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="—" type="text" disabled style="opacity:0.3"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="general-notes"><div class="general-notes-label">📝 Notas generales de la sesión</div><textarea id="d2-notes" placeholder="¿Cómo fue el entrenamiento?..."></textarea></div>
+      <button class="save-btn" onclick="saveSession('d2','Día 2 — Jalón')">GUARDAR SESIÓN</button>
+    </div>
+  </div>
+
+  <!-- DÍA 3 -->
+  <div class="session-card">
+    <div class="session-header" onclick="toggleSession('s3')">
+      <div class="session-left">
+        <div class="session-dot" style="background:#F59E0B"></div>
+        <div>
+          <div class="session-day">Viernes</div>
+          <div class="session-name">Día 3 — Piernas</div>
+        </div>
+      </div>
+      <button class="session-toggle" id="toggle-s3">▾</button>
+    </div>
+    <div class="session-body" id="body-s3">
+      <div class="session-meta">
+        <div class="field-group"><div class="field-label">Fecha</div><input type="date" class="field-input" id="d3-date"></div>
+        <div class="field-group"><div class="field-label">Modo</div><select class="field-input" id="d3-modo"><option value="gym">🏢 Gimnasio</option><option value="home">🏠 Casa</option></select></div>
+      </div>
+      <div class="field-label" style="margin-bottom:8px;">¿Cómo te sentiste?</div>
+      <div class="feeling-row" id="d3-feeling">
+        <button class="feeling-btn" onclick="setFeeling('d3',1)">😫<span class="feeling-lbl">Pesado</span></button>
+        <button class="feeling-btn" onclick="setFeeling('d3',2)">😐<span class="feeling-lbl">Regular</span></button>
+        <button class="feeling-btn" onclick="setFeeling('d3',3)">💪<span class="feeling-lbl">Bien</span></button>
+        <button class="feeling-btn" onclick="setFeeling('d3',4)">🔥<span class="feeling-lbl">Brutal</span></button>
+      </div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">1</div><div><div class="ex-log-name">Sentadilla con barra</div><div class="ex-log-target">3 × 8–10 reps</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">2</div><div><div class="ex-log-name">Prensa de piernas</div><div class="ex-log-target">3 × 12 reps</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">3</div><div><div class="ex-log-name">Peso muerto rumano (RDL)</div><div class="ex-log-target">3 × 10–12 reps</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">4</div><div><div class="ex-log-name">Zancadas caminando</div><div class="ex-log-target">3 × 10 reps/pierna</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">5</div><div><div class="ex-log-name">Hip thrust en banco</div><div class="ex-log-target">3 × 12–15 reps</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="ex-divider"></div>
+      <div class="ex-log"><div class="ex-log-header"><div class="ex-num-badge">6</div><div><div class="ex-log-name">Calf raise de pie</div><div class="ex-log-target">3 × 20 reps</div></div></div><div class="series-grid"><div class="series-head">S</div><div class="series-head">Kg</div><div class="series-head">Reps</div><div class="series-head">RPE</div><div></div></div><div class="series-grid"><div class="series-num">1</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">2</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="series-grid"><div class="series-num">3</div><input class="series-input" placeholder="—" type="number" inputmode="decimal"><input class="series-input" placeholder="—" type="number" inputmode="numeric"><input class="series-input" placeholder="1–10" type="number" inputmode="numeric"><button class="check-btn" onclick="toggleCheck(this)">✓</button></div><div class="ex-notes"><textarea placeholder="Notas..."></textarea></div></div>
+      <div class="general-notes"><div class="general-notes-label">📝 Notas generales de la sesión</div><textarea id="d3-notes" placeholder="¿Cómo fue el entrenamiento?..."></textarea></div>
+      <button class="save-btn" onclick="saveSession('d3','Día 3 — Piernas')">GUARDAR SESIÓN</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HISTORIAL ═══ -->
+<div class="content" id="historial">
+  <div style="height:4px"></div>
+  <div id="hist-list"><div class="empty-hist"><span class="empty-icon">📋</span>Aún no hay sesiones guardadas.<br>¡Registra tu primer entreno!</div></div>
+</div>
+
+<!-- ═══ ESTADÍSTICAS ═══ -->
+<div class="content" id="estadisticas">
+  <div style="height:4px"></div>
+  <div class="streak-card">
+    <div class="streak-num" id="stat-streak">0</div>
+    <div class="streak-lbl">sesiones completadas en total</div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="stat-semanas">0</div><div class="stat-lbl">Semanas activas</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-this-week">0/3</div><div class="stat-lbl">Esta semana</div></div>
+  </div>
+  <div class="progress-section">
+    <div class="progress-title">Días completados por tipo</div>
+    <div class="progress-row">
+      <div class="progress-label-row"><span>Día 1 — Empuje</span><span id="prog-d1-count">0 sesiones</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-d1" style="width:0%"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label-row"><span>Día 2 — Jalón</span><span id="prog-d2-count">0 sesiones</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-d2" style="width:0%"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label-row"><span>Día 3 — Piernas</span><span id="prog-d3-count">0 sesiones</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-d3" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer"><strong>Bitácora Fitness Pro</strong> · Los datos se guardan en este dispositivo<br>No compartas este archivo con nadie para mantener tu historial privado</div>
+
+<script>
+var feelings = {};
+var currentWeek = 1;
+var sessions = JSON.parse(localStorage.getItem('fitSessions') || '[]');
+
+function switchTab(id) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'historial') renderHistorial();
+  if (id === 'estadisticas') renderStats();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleSession(id) {
+  var body = document.getElementById('body-' + id);
+  var toggle = document.getElementById('toggle-' + id);
+  var isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('open', !isOpen);
+}
+
+function toggleCheck(btn) {
+  btn.classList.toggle('done');
+}
+
+function setFeeling(day, val) {
+  feelings[day] = val;
+  var row = document.getElementById(day + '-feeling');
+  row.querySelectorAll('.feeling-btn').forEach((b, i) => {
+    b.classList.toggle('selected', i + 1 === val);
+  });
+}
+
+function changeWeek(dir) {
+  currentWeek = Math.max(1, currentWeek + dir);
+  updateWeekDisplay();
+}
+
+function updateWeekDisplay() {
+  document.getElementById('weekLabel').textContent = 'SEMANA ' + currentWeek;
+  var base = new Date();
+  base.setDate(base.getDate() - base.getDay() + 1 + (currentWeek - 1) * 7);
+  var end = new Date(base); end.setDate(base.getDate() + 6);
+  var fmt = d => d.getDate() + '/' + (d.getMonth()+1);
+  document.getElementById('weekDates').textContent = fmt(base) + ' — ' + fmt(end);
+}
+
+function saveSession(dayId, dayName) {
+  var date = document.getElementById(dayId + '-date').value;
+  var modo = document.getElementById(dayId + '-modo').value;
+  var notes = document.getElementById(dayId + '-notes').value;
+  var feel = feelings[dayId] || 0;
+  var feelMap = {1:'😫 Pesado', 2:'😐 Regular', 3:'💪 Bien', 4:'🔥 Brutal'};
+
+  var exInputs = document.querySelectorAll('#body-s' + dayId.replace('d','') + ' .ex-log');
+  var exData = [];
+  exInputs.forEach(function(exEl) {
+    var name = exEl.querySelector('.ex-log-name');
+    var target = exEl.querySelector('.ex-log-target');
+    var rows = exEl.querySelectorAll('.series-grid:not(:first-child)');
+    var series = [];
+    rows.forEach(function(row) {
+      var inputs = row.querySelectorAll('.series-input');
+      if (inputs.length >= 2) {
+        series.push({ kg: inputs[0].value, reps: inputs[1].value, rpe: inputs[2] ? inputs[2].value : '' });
+      }
+    });
+    var noteEl = exEl.querySelector('textarea');
+    if (name) exData.push({ name: name.textContent, target: target ? target.textContent : '', series: series, note: noteEl ? noteEl.value : '' });
+  });
+
+  var session = {
+    id: Date.now(),
+    week: currentWeek,
+    day: dayName,
+    dayId: dayId,
+    date: date || new Date().toISOString().split('T')[0],
+    modo: modo,
+    feeling: feel,
+    feelingText: feelMap[feel] || '—',
+    notes: notes,
+    exercises: exData
+  };
+
+  sessions.unshift(session);
+  localStorage.setItem('fitSessions', JSON.stringify(sessions));
+
+  var btn = event.target;
+  var orig = btn.textContent;
+  btn.textContent = '✓ SESIÓN GUARDADA';
+  btn.style.background = '#085041';
+  setTimeout(function() {
+    btn.textContent = orig;
+    btn.style.background = '';
+  }, 2000);
+}
+
+function renderHistorial() {
+  var list = document.getElementById('hist-list');
+  if (!sessions.length) {
+    list.innerHTML = '<div class="empty-hist"><span class="empty-icon">📋</span>Aún no hay sesiones guardadas.<br>¡Registra tu primer entreno!</div>';
+    return;
+  }
+  var html = '';
+  sessions.forEach(function(s) {
+    var dotColor = s.dayId === 'd1' ? '#1D9E75' : s.dayId === 'd2' ? '#3B82F6' : '#F59E0B';
+    var exHtml = '';
+    if (s.exercises) {
+      s.exercises.forEach(function(ex) {
+        var seriesPills = ex.series.filter(sr => sr.kg || sr.reps).map(function(sr, i) {
+          return '<span class="hist-pill">S' + (i+1) + ': ' + (sr.kg || '—') + 'kg × ' + (sr.reps || '—') + '</span>';
+        }).join('');
+        if (seriesPills) {
+          exHtml += '<div class="hist-ex"><div class="hist-ex-name">' + ex.name + '</div><div class="hist-series-row">' + seriesPills + '</div>' + (ex.note ? '<div class="hist-note">' + ex.note + '</div>' : '') + '</div>';
+        }
+      });
+    }
+    html += '<div class="hist-card"><div class="hist-header"><div><div class="hist-title" style="display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:' + dotColor + ';display:inline-block;"></span>' + s.day + '</div><div class="hist-date">Semana ' + s.week + ' · ' + s.date + ' · ' + (s.modo === 'gym' ? '🏢 Gym' : '🏠 Casa') + '</div></div><div style="font-size:20px">' + (s.feelingText.split(' ')[0] || '') + '</div></div><div class="hist-body">' + exHtml + (s.notes ? '<div class="hist-note" style="margin-top:8px;padding:8px;background:#F9FAFB;border-radius:6px;">' + s.notes + '</div>' : '') + '</div></div>';
+  });
+  list.innerHTML = html;
+}
+
+function renderStats() {
+  var total = sessions.length;
+  document.getElementById('stat-streak').textContent = total;
+  var weeks = new Set(sessions.map(s => s.week)).size;
+  document.getElementById('stat-semanas').textContent = weeks;
+  var thisWeekSessions = sessions.filter(s => s.week === currentWeek).length;
+  document.getElementById('stat-this-week').textContent = Math.min(thisWeekSessions, 3) + '/3';
+  var d1 = sessions.filter(s => s.dayId === 'd1').length;
+  var d2 = sessions.filter(s => s.dayId === 'd2').length;
+  var d3 = sessions.filter(s => s.dayId === 'd3').length;
+  var maxCount = Math.max(d1, d2, d3, 1);
+  document.getElementById('prog-d1-count').textContent = d1 + ' sesiones';
+  document.getElementById('prog-d2-count').textContent = d2 + ' sesiones';
+  document.getElementById('prog-d3-count').textContent = d3 + ' sesiones';
+  document.getElementById('prog-d1').style.width = Math.round(d1/maxCount*100) + '%';
+  document.getElementById('prog-d2').style.width = Math.round(d2/maxCount*100) + '%';
+  document.getElementById('prog-d3').style.width = Math.round(d3/maxCount*100) + '%';
+}
+
+updateWeekDisplay();
+</script>
+</body>
+</html>
